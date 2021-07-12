@@ -25,10 +25,43 @@
                 </span>
             </div>
             <div class="action">
-                <a href="">Edit</a>
-                <a href="">Delete</a>
+                <a href="@Url.Action("Edit","Courses", new { id=course.Id})">Edit</a>
+                <a href="#" class="js-cancel-course" data-course-id="@course.Id">Cancel</a>
             </div>
         </li>
     }
 </ul>
+<script>
+        $(document).ready(function () {
+            $(".js-cancel-course").click(function (e) {
+                e.preventDefault();
+                var link = $(e.target);
+                bootbox.confirm({
+                    title: "Cancel Course?",
+                    message: "Are you sure to cancel?",
+                    buttons: {
+                        cancel: {
+                            label: '<i class="fa fa-times"></i> Cancel'
+                        },
+                        confirm: {
+                            label: '<i class="fa fa-check"></i> Confirm'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            $.ajax({
+                                url: "/api/courses/" + link.attr("data-course-id"),
+                                method: "DELETE"
+                            })
+                            .done(function () {
+                                link.parents("li").fadeOut(function () {
+                                    $(this).remove();
+                                });
+                            })
+                        }
+                    }
+                });
+            });
+        });
+</script>
 
