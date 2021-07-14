@@ -2,14 +2,6 @@
     ViewBag.Title = "Home Page";
 }
 <div class="row">
-    <ul>
-        @foreach (var course in Model.UpcommingCourses)
-        {
-            <li>
-                @course.DateTime - @course.Lecturer.Name
-            </li>
-        }
-    </ul>
     <ul class="course">
         @foreach (var course in Model.UpcommingCourses)
         {
