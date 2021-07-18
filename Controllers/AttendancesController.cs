@@ -22,17 +22,23 @@ namespace BigSchool.Controllers
         public IHttpActionResult Attend(AttendanceDto attendanceDto)
         {
             var userId = User.Identity.GetUserId();
-            if (_dbContext.AttenDances.Any(a => a.AttendeeId == userId && a.CourseId == attendanceDto.CourseId))
-                return BadRequest("The Attendance already exitst");
             var attendance = new Attendance
             {
                 CourseId = attendanceDto.CourseId,
-                AttendeeId = User.Identity.GetUserId()
+                AttendeeId = userId
             };
+
+            if (_dbContext.AttenDances.Any(a => a.AttendeeId == userId && a.CourseId == attendanceDto.CourseId))
+            {
+
+                //_dbContext.Attendances.Remove(attendance);
+                _dbContext.Entry(attendance).State = System.Data.Entity.EntityState.Deleted;
+                _dbContext.SaveChanges();
+                return Json(new { isFollow = false });
+            }
             _dbContext.AttenDances.Add(attendance);
             _dbContext.SaveChanges();
-
-            return Ok();
+            return Json(new { isFollow = true });
         }
     }
 }
