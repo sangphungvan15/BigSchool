@@ -49,6 +49,7 @@ namespace BigSchool.Controllers
             _dbContext.SaveChanges();
             return RedirectToAction("Index", "Home");
         }
+        [Authorize]
         public ActionResult Attending()
         {
             var userId = User.Identity.GetUserId();
